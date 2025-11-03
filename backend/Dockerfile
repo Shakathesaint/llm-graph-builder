@@ -6,7 +6,8 @@ EXPOSE 8000
 RUN apt-get update && \
    apt-get install -y --no-install-recommends \
        libmagic1 \
-       libgl1-mesa-glx \
+       # sostituito libgl1-mesa-glx con libgl1
+       libgl1 \
        libreoffice \
        cmake \
        poppler-utils \
