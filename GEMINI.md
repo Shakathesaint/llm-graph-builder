@@ -66,3 +66,7 @@ uvicorn score:app --reload
 *   **Linting:** The frontend uses ESLint and Prettier for code formatting and linting.
 *   **Commits:** The project uses husky and lint-staged to run linting on pre-commit.
 *   **Testing:** The backend has some tests in `test_commutiesqa.py` and `test_integrationqa.py`.
+
+# User tools
+
+When user asks for committing changes, you must refer to the instructions in .claude\commands\changelog-commit.md and execute the commands mentioned there literally.

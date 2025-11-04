@@ -49,14 +49,22 @@ def get_llm(model: str):
                 },
             )
         elif "openai" in model:
-            model_name, api_key = env_value.split(",")
+            model_name, api_key_config_value = env_value.split(",")
+            # Check if the configured API key is a placeholder for the global OPENAI_API_KEY
+            if api_key_config_value.strip().lower() == "use_openai_api_key":
+                actual_api_key = os.getenv("OPENAI_API_KEY")
+                if not actual_api_key:
+                    raise LLMGraphBuilderException("OPENAI_API_KEY environment variable is not set, but 'use_openai_api_key' was specified for an LLM model config.")
+            else:
+                actual_api_key = api_key_config_value.strip()
+
             if "o3-mini" in model:
                 llm= ChatOpenAI(
-                api_key=api_key,
+                api_key=actual_api_key,
                 model=model_name)
             else:
                 llm = ChatOpenAI(
-                api_key=api_key,
+                api_key=actual_api_key,
                 model=model_name,
                 temperature=0,
                 )
