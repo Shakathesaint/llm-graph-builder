@@ -124,15 +124,15 @@ As a user with existing workflows using GPT-4o or other OpenAI models, I need as
 - **FR-011**: Frontend MUST display all four GPT-5 variants in model selection dropdowns for both extraction settings and chat settings
 - **FR-012**: Frontend MUST order GPT-5 models at the TOP of OpenAI model dropdowns, before GPT-4, o1, o3, and other existing models
 - **FR-013**: Frontend MUST use the following display order for GPT-5 variants: gpt-5, gpt-5-mini, gpt-5-nano, gpt-5-chat
-- **FR-014**: Frontend MUST persist GPT-5 model selection in user preferences/session storage so selection survives page refreshes
+- **FR-014**: Frontend MUST persist GPT-5 model selection in browser localStorage (not sessionStorage) so selection survives page refreshes AND browser restarts. Storage key format: context-specific (e.g., "selectedExtractionModel", "selectedChatModel")
 - **FR-015**: Frontend MUST allow switching between GPT-5 variants and other OpenAI models without page reload or system restart
 - **FR-016**: Frontend MUST show clear error messages when GPT-5 API calls fail (e.g., "Model not available for your API key", "Rate limit exceeded")
 - **FR-017**: Frontend MUST update environment variable documentation to include GPT-5 models in VITE_LLM_MODELS configuration
 
 #### Configuration Requirements
 
-- **FR-018**: System MUST add GPT-5 models to backend configuration constants (if model lists are hard-coded in `backend/src/shared/common_fn.py` or similar)
-- **FR-019**: System MUST add GPT-5 models to frontend configuration constants (`frontend/src/utils/Constants.ts` or model list definitions)
+- **FR-018**: System MUST add GPT-5 models to backend configuration constants IF hard-coded model lists exist (verification: T003 checks `backend/src/shared/common_fn.py` for constants like MODEL_VERSIONS or OPENAI_MODELS). If no hard-coded lists found, this requirement does not apply (configuration is purely env-variable-driven)
+- **FR-019**: System MUST add GPT-5 models to frontend configuration constants (`frontend/src/utils/Constants.ts` llms array at lines 14-41)
 - **FR-020**: System MUST update example `.env` files to show GPT-5 models in LLM_MODEL_CONFIG examples and VITE_LLM_MODELS lists
 - **FR-021**: System MUST update README or documentation to mention GPT-5 support and pricing differences between variants
 
@@ -172,7 +172,7 @@ As a user with existing workflows using GPT-4o or other OpenAI models, I need as
 
 - **SC-009**: Documentation is updated to include GPT-5 support with pricing information, model descriptions, and configuration examples in README and `.env` files
 
-- **SC-010**: Implementation is completed within 2-3 days by a single developer (low complexity - primarily configuration changes rather than algorithmic work)
+- **SC-010**: Implementation is completed within 2-3 calendar days by a single developer (7-8 effective work hours as per tasks.md breakdown), accounting for PR review cycles, manual testing, and context switching. Low complexity - primarily configuration changes rather than algorithmic work
 
 ### Assumptions
 
@@ -180,7 +180,7 @@ As a user with existing workflows using GPT-4o or other OpenAI models, I need as
 
 2. **API Interface Stability**: Assumes GPT-5 models use the same API interface as GPT-4 models (same request/response format, same parameters supported: temperature, top_p, max_tokens, etc.)
 
-3. **Pricing Stability**: Assumes GPT-5 pricing remains as announced: gpt-5 ($1.25/$10), gpt-5-mini ($0.25/$2), gpt-5-nano ($0.05/$0.40) per 1M input/output tokens, or that OpenAI API responses include actual cost data
+3. **Pricing Stability**: Assumes GPT-5 pricing remains as announced: gpt-5 ($1.25/$10), gpt-5-mini ($0.25/$2), gpt-5-nano ($0.05/$0.40), gpt-5-chat ($1.25/$10 - same tier as gpt-5) per 1M input/output tokens, or that OpenAI API responses include actual cost data. Note: gpt-5-chat pricing assumed equal to gpt-5 as it is a conversational variant of the flagship model, not a lower-tier model
 
 4. **Model Naming Persistence**: Assumes OpenAI will not rename or deprecate these model IDs in the near term (6-12 months), allowing stable integration without frequent updates
 
